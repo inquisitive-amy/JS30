@@ -18,28 +18,112 @@
     }
 
     // Regular
+    console.log('hello');
 
     // Interpolated
+    // old
+    console.log('hello I am a %s string!', 'Amy');
+    // new ES6
+    name = "amy";
+    console.log(`hello I am a ${name} string!`);
 
     // Styled
+    console.log('%c hello I am string!', 'font-size: 50px; background: red;');
 
     // warning!
+    console.warn('oh no!');
 
     // Error :|
+    console.error('oh shite!');
 
     // Info
+    console.info('test');
 
     // Testing
+    console.assert(1 === 0, 'that is wrong!')
 
     // clearing
+    console.clear();
+    // clears your console
 
     // Viewing DOM Elements
+    p = document.querySelector('p');
+    console.dir(p);
+    // shows you the data set, properties and methods in prototype
 
     // Grouping together
+    dogs.forEach(dog => {
+      console.group(`${dog.name}`);
+      console.log(`This is ${dog.name}`);
+      console.log(`${dog.name} is ${dog.age} years old`);
+      console.groupEnd(`${dog.name}`);
+    });
+
+    // Group and groupEnd have to say the same thing.
+    
 
     // counting
+    // counts how many times you use something
+    console.count('Wes');
+    console.count('Wes');
+    console.count('Wes');
+    console.count('Wes');
+    console.count('Steve');
+    console.count('Steve');
+    console.count('Steve');
 
-    // timing
+    // timing 
+    //  Tells you how long it took to do something
+
+    console.time('fetching data');
+    const endpoint = 'https://api.github.com/users/inquisitive-amy'
+
+    // ========================
+    // SHORTHAND EXAMPLE OF fetch with arrow functions
+    // ========================
+
+    // Get data from a resource
+    fetch(endpoint)
+    // When the promise is returned successfully
+    // Run a function that takes data as an argument and then runs data.json()
+    .then(data => data.json()
+
+    // .json() returns a promise so you call .then() to run when it comes back resolved
+    .then(data => {
+      console.timeEnd('fetching data')
+      console.log(data);
+      // Now you can do something with the data
+    }));
+
+
+    // ========================
+    // LONGHAND function example
+    // ========================
+
+    // 1. Step 1 = Fetch the data which returns a promise
+    const github = fetch(endpoint);    
+    console.log(github);
+    
+    // 2. Step 2 = call .then which will run a callback function
+    // when the promise resolves (successfull)
+    github.then(function(data){
+
+      // data at this point is still a Response object
+      console.log(data);
+
+      // Step 3. Call .json() on the data. It's a mixin which returns Promise
+      // You call .then() on this promise which will then run another callback function when it resolves
+      // When it does you will have a JS object to view real data
+
+      data.json()
+      .then(function(data){
+        // Only here can you finally read the data of your request
+        console.log(data);
+      })
+    });
+
+    console.table(dogs);
+
 
   </script>
 </body>

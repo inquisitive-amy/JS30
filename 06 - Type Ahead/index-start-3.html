@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+
+  <script>
+
+  // Empty cities array
+  const cities = [];
+  
+  // Endpoint
+  const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+  // Returns a Promise object
+  data = fetch(endpoint);
+  
+  // Returns a response object, that we turn into a javscript object using .json()
+  // Take the javascript object and put it to our empty array
+  data.then(response => response.json())
+      .then(json => cities.push(...json));
+
+  // Filter the results, takes in a search term and a list to filter from
+  function filterResults(searchTerm, citiesList){
+
+    // Filter an array of cities, 'place' is the argument
+    return citiesList.filter(place => {
+      
+        // Create a regex of the search term so we ca
+        const regex = new RegExp(searchTerm, 'gi');      
+
+        // See if the search term matches any of the city names
+        // return an array of results that evaluate true
+        return place.city.match(regex);
+    });
+  }
+
+  // show the user the matched results
+  function displayMatches(){
+    // "this" is the input box, so the value is what was typed
+    const search = this.value;
+    
+    // run the filter function using the search value, and the cities array 
+    const results = filterResults(search, cities);
+    
+    // filterResults returned an array and we stored it in the results variable
+    const html = results.map(place => {
+      return  `<li>
+                ${place.city}, ${place.state}
+                <span> ${place.population}</span>
+                </li>`
+    }).join('');
+
+    document.querySelector('.suggestions').innerHTML = html;
+  }
+
+  const input = document.querySelector('.search');
+
+  // On keyup, display results to the user
+  input.addEventListener('keyup', displayMatches);
+
+
+  </script>
+
+</body>

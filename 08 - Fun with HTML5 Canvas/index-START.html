@@ -5,8 +5,101 @@
   <title>HTML5 Canvas</title>
 </head>
 <body>
-<canvas id="draw" width="800" height="800"></canvas>
+<canvas id="draw"></canvas>
+
 <script>
+  const canvas = document.querySelector('#draw');
+  // You don't draw on the canvas, you draw on the Context in either 2D or 3D
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  // base settings
+  ctx.strokeStyle = '#BADA55';
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 50;
+  ctx.globalCompositeOperation = 'multiply';
+  
+  // variables
+  // flag for drawing
+  let isDrawing = false;
+
+  // Where the line starts and stops
+  let lastX = 0;
+  let lastY = 0;
+  let hue = 0;
+  let direction = true;
+
+  // Draw to the canvas
+  function draw(e){    
+    
+    // Set the colour of the stroke with hue, saturation and lightness
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+
+    // If the mouse isn't down, don't draw or listen
+    if(!isDrawing) return;
+
+    // Begin the Path
+    ctx.beginPath();
+    
+    // Start from these coordinates    
+    ctx.moveTo(lastX, lastY);
+    
+    // Go To these coordinates
+    ctx.lineTo(e.offsetX, e.offsetY);
+
+    // Draw the line
+    ctx.stroke();   
+
+    // Reset the coordinates
+    setCoordinates(e);
+
+    // Update the colour
+    hue++;
+
+    
+    // Update line width
+    // If the width is greater than 100 or less than 1
+    // flip the value of direction from true to false or vice versa
+    if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+      direction = !direction;
+    }
+
+    // If direction is true, make the line bigger, 
+    // If false, make it smaller
+    if(direction) {
+      ctx.lineWidth++;
+    } else {
+      ctx.lineWidth--;
+    }
+
+  }
+
+  // Reset the coordinates
+  function setCoordinates(e){
+    // ES6 Destructuring
+    [lastX, lastY] = [e.offsetX, e.offsetY]
+  }
+
+  
+
+  // Event Listners
+  canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    setCoordinates(e);
+  });
+
+  canvas.addEventListener('mousemove', draw);
+  
+  canvas.addEventListener('mouseup', setCoordinates);
+
+  canvas.addEventListener('mouseup', () => isDrawing = false);
+  
+  canvas.addEventListener('mouseout', () => isDrawing = false);
+
+
+
 </script>
 
 <style>

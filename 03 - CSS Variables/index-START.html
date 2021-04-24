@@ -26,6 +26,8 @@
       misc styles, nothing to do with CSS variables
     */
 
+    /* CSS Variables can be updated with JavaScript */
+
     body {
       text-align: center;
       background: #193549;
@@ -42,9 +44,42 @@
     input {
       width: 100px;
     }
+
+    :root {
+      --base: red;
+      --spacing: 10px;
+      --blur: 10px;
+
+    }
+
+    img {
+      display: block;
+      background: var(--base);
+      padding: var(--spacing);
+      filter: blur(var(--blur));
+    }
   </style>
 
-  <script>
+  <script>  
+    // 1. get all of the inputs
+    const inputs = document.querySelectorAll('.controls input');
+
+    // 3. get the value of the inputs
+    function handleUpdate() {
+      let root = document.documentElement;    
+      var value = this.value;
+      
+      // Tells us if the input value is in pixels or nothing
+      const suffix = this.dataset.sizing || '';
+    
+      // Update the variables with the new inputs value
+      document.documentElement.style.setProperty(`--${this.name}`, this.value+`${suffix}`);      
+    }
+
+    // 2. Watch for an event on the input
+    inputs.forEach(input => input.addEventListener('change', handleUpdate));
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+
   </script>
 
 </body>

@@ -7,6 +7,58 @@
 </head>
 <body>
 <script>
+  // make an empty array
+  // const pressed = [];
+  // let secret = "amy is cool";
+
+  // function stringToArray(string){
+  //   return string.split("").join();
+  // }
+
+  // secret = stringToArray(secret);
+
+  // window.addEventListener('keyup', function(e){
+  //   let key = e.key;
+  //   pressed.push(key);
+
+  //   if (pressed == secret){
+  //     alert('You are in!');
+  //   }
+
+  //   console.log(`prssed: ${pressed}`);
+  // });
+
+  // Create an empty array to store the pressed key values in
+  const pressed = [];
+  
+  // Create a string that will be the secret
+  let secretKey = "amy is cool";
+
+  // listen for any keyboard keyup event
+  window.addEventListener('keyup', function(e){
+
+    // Push the key name into the pressed empty array to keep track of what was typed
+    pressed.push(e.key);
+
+    // They array could get very long if you listened for every single
+    // key event so we will only keep the last 11 values since that is the length of the secret
+    // e.g. splice(start, deleteCount, item1, item2, itemN)
+
+    // 1. Start changing the array at the 12th last element - To start from the back of the array, use a negative
+    // 2. Delete (length of array - length of secret e.g 11-11 = 0) from the beginning of the array
+    // E.g. -11 - 1 = -12 , x - 11
+    pressed.splice(-secretKey.length - 1, pressed.length - secretKey.length);
+
+    // Use the join method to concatenate all elements in the pressed array and return a string
+    // Then you can use the includes method to see if the secret key string is in the pressed string.
+    if (pressed.join('').includes(secretKey)){
+      alert('ding ding!');
+      cornify_add();
+    }  
+
+    console.log(pressed);
+  });
+
 </script>
 </body>
 </html>

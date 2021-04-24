@@ -37,29 +37,125 @@
     
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    // The filter() method 1. creates a new array with 2. all elements that pass the test implemented by the 3. provided function
+
+    // ES6
+    const fifteen = inventors.filter(inventors => inventors.year >= 1500 && inventors.year <= 1600);
+    // console.log(fifteen);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
+    // The map() method 1. creates a new array 2. populated with the results of calling a 3. provided function on 4. every element in the calling array.
+    // Array is a factory machine, you always get the same amount of items as you pass it
+
+    const fullNames = inventors.map(inventors => `${inventors.first} ${inventors.last}`);
+    // console.log(fullNames);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    // The sort() method sorts the elements of an array in place and returns the sorted array
+    // The default order is ascending
+    // It converts the elements into strings and then compares their sequences of UTF-16 code units value
+    // It is a COMPARE function
+
+    // *** You get 2 items and only sort those 2
+    // Return 1 and -1 to move them up and down the array in position
+
+    const ordered = inventors.sort((a,b) => a.year > b.year ? 1 : -1 );
+    // console.log(ordered);
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
+    // The reduce() method 1. executes a reducer function 2. (that you provide) on 3. each element of the array, 4. resulting in single output value.
+    
+    const totalYears = inventors.reduce((total, inventor) => {
+      return total + (inventor.passed - inventor.year);
+    }, 0);
+
+    // console.log(totalYears);
 
     // 5. Sort the inventors by years lived
+
+    // Get the number of years the inventor lived and then sort the order by fewest to most
+    const yearsLived = inventors.sort(function(a,b){
+      const lastGuy = a.passed - a.year;
+      const nextGuy = b.passed - b.year;
+      return lastGuy > lastGuy ? 1 : -1 ;      
+    });
+    
+    // console.log(yearsLived);
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
 
 
+    // 1. create an array by getting all of the elements on the page and turning the node list into an array
+    // 2. map over the array to get the textContent of the link
+    // 3. filter the list of name and return only the ones that include de
+    // You can chain the map and filter functions together
+    // the words in the map and filter functions are parameters, not arguements so they can be whatever you want
+    
+    const links = Array.from(document.querySelectorAll('.mw-category-group ul li a'));
+    const de = links
+                .map(link => link.textContent)
+                .filter(streetName => streetName.includes('de'));
+                // console.log(de);
+
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+
+    // 1. turn the array into another array
+    var names = people.sort(function(a,b){
+      // create variables so you can compare which ones will be greater than the other one.
+      // sort compares the strings sequences of UTF-16 code units value
+      const [aLast, aFirst] = a.split(", ");
+      const [bLast, bFirst] = b.split(", ");
+      // 
+      return aLast > bLast ? 1 : -1;    
+    });
+
+    // console.table(names);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
 
+    // 1. find out how many times car, truck, bike, walk, van occur in the array
+
+    const transportation = data.reduce((object, item) => {      
+      // If the object doesn't already have a key named "car" create it using bracket notation
+      // Otherwise if it exists, incremenet it by one
+    // The initial value is an object, not a number, as noted on the very last line of the function
+    // because you are starting with an empty obkect you can check to see if it has any children
+
+    // If the key doesn't exist, create it and set it to 0
+      if (!object[item]){
+        object[item] = 0;
+      }
+  
+      // Then increment the value by one
+      object[item]++;
+      return object;
+
+    }, {});
+
+    console.log(transportation);
+
   </script>
 </body>
 </html>
+
+
+<script>
+  // Challenge
+  // const confidential = {};
+  // confidential["murderer"] = "Mr.White";
+  // confidential.room = "Parlour";
+  // confidential.weapons = ["Candle Stick", "soap"];
+  // confidential;
+
+
+  // Destructuring
+  // const {name, room, weapon} = {name: "Rusty", room: "kitchen", weapon: "candlestick"};
+
+</script>

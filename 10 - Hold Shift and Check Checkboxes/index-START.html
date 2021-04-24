@@ -54,7 +54,6 @@
    The following is a common layout you would see in an email client.
 
    When a user clicks a checkbox, holds Shift, and then clicks another checkbox a few rows down, all the checkboxes inbetween those two checkboxes should be checked.
-
   -->
   <div class="inbox">
     <div class="item">
@@ -96,6 +95,59 @@
   </div>
 
 <script>
+
+  // Elements
+  // =============================
+  const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+  const isChecked = (element) => element.classList.contains('checked');
+  
+  // Flags
+  // =============================  
+  let lastChecked;
+  let currentChecked;
+  // =============================================================
+  // Listen for click events and find the index
+  // =============================================================
+
+  // Listen to find out when it gets clicked
+  function handleCheck(e){    
+  
+    // When it gets clicked remove classes from all checkboxes    
+    checkboxes.forEach(checkbox => {
+      checkbox.classList.remove('checked');
+    });
+
+    this.classList.add('checked');
+
+    // Set the last and current index in variables
+    if (currentChecked == undefined){
+        currentChecked = checkboxes.findIndex(isChecked);
+    } else {
+      lastChecked = currentChecked;
+      currentChecked = checkboxes.findIndex(isChecked);
+    }    
+
+    // Check if shift is being held down and if the element being clicked is going from false (unchecked) to true (checked).
+    if (this.checked && this.checked){
+                
+      checkboxes.forEach(function(item, i) {
+        if (currentChecked > lastChecked){
+          if (i > lastChecked && i < currentChecked){
+            item.checked = true;
+          }
+        }
+        if (currentChecked < lastChecked){
+          if (i < lastChecked && i > currentChecked){
+            item.checked = true;
+          }
+        }
+      });
+
+    }
+  }
+
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleCheck));
 </script>
+
 </body>
 </html>

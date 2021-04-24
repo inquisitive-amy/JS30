@@ -26,15 +26,64 @@
 
     // Some and Every Checks
     // Array.prototype.some() // is at least one person 19 or older?
+    // .some() loops over every item in the array and returns true or fale
+    const yearCheck = people.some(person => {      
+      const currentYear = new Date().getFullYear();      
+      if (person.year >= currentYear - 19){
+        return true;
+      }
+      // You could write the above in one line to write an implicit return while removing the body block {}
+      // return person.year >= currentYear -19;
+    });
+    // console.log({yearCheck});
+
+
     // Array.prototype.every() // is everyone 19 or older?
+    // .every() takes one callback function
+    // person is the one parameter so it doesn't need parentheses
+    // we are writing it all on one line so we can remove the curly braces for the body block
+    // because it's all on one line the return statement is implicit
+    const areAllAdults = people.every(person => (person.year >= new Date().getFullYear() -19));
+    // console.log(areAllAdults);
+
 
     // Array.prototype.find()
     // Find is like filter, but instead returns just the one you are looking for
     // find the comment with the ID of 823423
+    // const specificComment = comments.find(function(comment){
+    //   if (comment.id == 823423 ) {
+    //     return true;
+    //   }
+    // });
+
+    const specificComment = comments.find(comment => comment.id === 823423);
+    // Using an arrow function and an implicit return
+    // console.log(specificComment)
+
 
     // Array.prototype.findIndex()
     // Find the comment with this ID
     // delete the comment with the ID of 823423
+    // Using an arrow function and an implicit return
+
+      const index = comments.findIndex(comment => comment.id === 823423);
+      // this returned 1 (the index)
+      
+      // Remove one item starting at index "removeComment" which was equal to 1
+      // comments.splice(1, index);
+
+      // Using slice instead of splice because we prefer to not modify the original array
+      // we create a new array and inside of use the slice method
+      // slice takes 2 argyments, the start and end index
+      // so the first items will be all items up to the index we want to remove and the second is all items after the index we want to remove
+      // We use the spread operator to drop the new items into the new empty array
+      const newComments = [
+        ...comments.slice(0,index), // this returns an array
+        ...comments.slice(index + 1) // this also returns an array
+      ];    
+      // console.log(newComments);
+
+
 
   </script>
 </body>

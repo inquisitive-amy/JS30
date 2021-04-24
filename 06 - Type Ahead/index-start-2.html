@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+// 1. fetch the data from the endpoint
+// Fetch takes one argument, the endpoint you want to get data from
+// Pass data as an argument so you can use it
+// A promise is what is returned from fetch()
+// A response object is what you get back from the fetch
+// data is what you get back from .json()
+// .json returns a promise which means you can call .then on it
+// You don't get JSON returned, you get a promise which is a javascript object which can then manipulate
+
+const citiesList = [];
+
+fetch(endpoint)
+  .then(response => response.json())
+  .then(data => {      
+    citiesList.push(...data);    
+});
+
+
+// Create a function that takes in the word you want to filter by and the list of cities
+//  From this function, return the result of the filtering
+function filterCities(wordToMatch, list){
+  return citiesList.filter(place => {
+    const regex = new RegExp(wordToMatch , 'gi');
+    return place.city.match(regex)|| place.state.match(regex);
+  });
+}
+
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function displayMatches() {
+  const value = this.value;
+  const matchArray = filterCities(value, citiesList);
+  const suggestionList = document.querySelector('.suggestions');
+
+  console.log(matchArray);
+  
+  const html = matchArray.map(function(name){
+    return `<li>
+              <span>${name.city}, ${name.state}</span>              
+              <span>${numberWithCommas(name.population)}</span>
+            </li>`;
+  }).join('');  
+    
+  suggestionList.innerHTML = html;
+}
+
+    
+// Get the value from the input where the user is typing
+const search = document.querySelector('.search');
+search.addEventListener('keyup', displayMatches);
+
+</script>
+</body>
+</html>
